@@ -1,0 +1,132 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "ubuntu/trusty64"
+
+  # Mount the M2 Maven repository from host machine
+  config.vm.synced_folder "~/.m2/", "/home/vagrant/.m2"
+
+  config.ssh.forward_x11 = true
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "ubuntu-java-dev"
+    vb.gui = true  
+    vb.memory = "4096"    
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    
+    # make sure the vm is up and running
+    while [ "`runlevel`" = "unknown" ]; do
+      echo "runleel is 'unknown' - waiting for 10s"
+      sleep 10
+    done
+    echo "runlevel is now valid ('`runlevel`'), kicking off provisioning..."
+
+    # become the main user, not root
+    su vagrant
+    
+    sudo echo "LANG=en_US.UTF-8" >> /etc/environment
+    sudo echo "LANGUAGE=en_US.UTF-8" >> /etc/environment
+    sudo echo "LC_ALL=en_US.UTF-8" >> /etc/environment
+    sudo echo "LC_CTYPE=en_US.UTF-8" >> /etc/environment
+
+    # equip the base image
+    sudo apt-get update -y
+    sudo apt-get install build-essential rsync telnet screen man wget -y
+    sudo apt-get install strace tcpdump -y
+    sudo apt-get install libssl-dev zlib1g-dev libcurl3-dev libxslt-dev -y
+    sudo apt-get install software-properties-common python-software-properties -y
+    sudo apt-get install git -y
+    sudo apt-get install curl -y
+
+    sudo add-apt-repository -y ppa:webupd8team/java
+    sudo apt-get update
+    sudo apt-get -y upgrade
+    #echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections 
+    #echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+    #sudo apt-get -y install oracle-java8-installer
+    
+    # Install Oracle Java 7
+    curl -L --cookie "oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz -o jdk-7-linux-x64.tar.gz
+    tar xfvz jdk-7-linux-x64.tar.gz
+    sudo mkdir -p /usr/lib/jvm
+    sudo mv ./jdk1.7.* /usr/lib/jvm/
+    sudo chown -R root:root /usr/lib/jvm/jdk1.7.0_79
+    rm jdk-7-linux-x64.tar.gz
+
+    # Install Oracle Java 8
+    curl -L -C - -b "oraclelicense=accept-securebackup-cookie" -O http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jdk-8u65-linux-x64.tar.gz -o jdk-8-linux-x64.tar.gz
+    tar xfvz jdk-8-linux-x64.tar.gz
+    sudo mkdir -p /usr/lib/jvm
+    sudo mv ./jdk1.8.* /usr/lib/jvm/
+    sudo chown -R root:root /usr/lib/jvm/jdk1.8.0_65
+    rm jdk-8-linux-x64.tar.gz
+
+    # Install Jenv
+    export JENV_ROOT=/usr/local/lib/jenv
+    git clone https://github.com/gcuisinier/jenv.git $JENV_ROOT
+    sudo chown -R vagrant:root $JENV_ROOT
+    echo 'export PATH="/usr/local/lib/jenv/bin:$PATH"' >> /home/vagrant/.bashrc
+    echo 'eval "$(jenv init -)"' >> /home/vagrant/.bashrc
+    source /home/vagrant/.bashrc
+    chown vagrant:root /home/vagrant/.bashrc
+    ###### ADD MORE JAVA VERSIONS HERE ######
+    $JENV_ROOT/bin/jenv add /usr/lib/jvm/jdk1.7.0_79
+    $JENV_ROOT/bin/jenv add /usr/lib/jvm/jdk1.8.0_65
+    #########################################
+    $JENV_ROOT/bin/jenv versions
+    echo "Selecting Java version ${JAVA_VERSION}"
+    $JENV_ROOT/bin/jenv global oracle64-1.8.0.65  # set Java8 to default.
+    $JENV_ROOT/bin/jenv versions
+
+    export $HOME=/home/vagrant
+
+    echo "export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_66" >> /home/vagrant/.bashrc
+
+    java -version
+
+    # Install Apache ANT
+    echo "Downloading Ant 1.9.6...."
+    wget --quiet http://apache.mirrors.pair.com/ant/binaries/apache-ant-1.9.6-bin.tar.gz
+    tar xfvz apache-ant-1.9.6-bin.tar.gz
+    sudo mv apache-ant-1.9.6 /usr/local
+    sudo ln -s /usr/local/apache-ant-1.9.6/bin/ant /usr/bin/ant
+    rm apache-ant-1.9.6-bin.tar.gz
+
+    # Install Apache Maven
+    echo "Downloading Maven 3.3.9...."
+    wget --quiet http://supergsego.com/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+    tar xfvz apache-maven-3.3.9-bin.tar.gz
+    sudo mv apache-maven-3.3.9 /usr/local
+    sudo ln -s /usr/local/apache-maven-3.3.9/bin/mvn /usr/bin/mvn
+    rm apache-maven-3.3.9-bin.tar.gz
+
+    # Set Java home
+    export JAVA_HOME=/usr/lib/jvm/jdk1.7.0_79
+  
+    sudo apt-get install -y xfce4 virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
+    sudo apt-get install gnome-icon-theme-full tango-icon-theme
+    sudo echo "allowed_users=anybody" > /etc/X11/Xwrapper.config
+
+    sudo wget -O /opt/eclipse-java-mars-1-linux-gtk-x86_64.tar.gz http://ftp.fau.de/eclipse/technology/epp/downloads/release/mars/1/eclipse-java-mars-1-linux-gtk-x86_64.tar.gz
+    cd /opt/ && sudo tar -zxvf eclipse-java-mars-1-linux-gtk-x86_64.tar.gz
+
+    completion_msg="
+    ===========================================
+    Completed Provision of Java Dev Environment
+    ===========================================
+    Installed are:
+      - Java JDK 7u79
+      - Java JDK 8u66
+      - Jenv (defaults to Java8)
+      - Apache Ant 1.9.6
+      - Maven 3.3.9
+      - Eclipse IDE Java Mars
+    ===========================================
+    Happy Coding!
+    "
+  SHELL
+end
