@@ -1,14 +1,14 @@
 #!/bin/bash
 # ctl_mongo.sh - version 1.0
 #
-# Bash script to stop, start and check Mongo DB.
+# Bash script to stop, start and check Mongo DB server.
 #
 # Notes:
 # - This script requires env_mongo.sh to be on the same folder, 
 # this file is used to set all the environment variables.
 #
 # Change logs:
-#	1.0: (hicham.x.medkouri@jpmorgan.com), intial version.
+#	1.0: hicham medkouri, intial version.
 
 source env_mongo.sh
 
@@ -70,14 +70,14 @@ case "$1" in
     start)
       	start
         ;;
-    check)
-        check
-        ;;
     stop)
         stop
         ;;
     restart)
         restart
+        ;;
+    check)
+        check
         ;;
     *)
         echo "Usage: $0 {start|stop|restart|check}"

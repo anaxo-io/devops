@@ -1,10 +1,11 @@
 #!/bin/bash
 # ctl_helix.sh - version 1.0
 #
-# Bash script to stop, start and check RDPS Module.
+# This bash script regroups some helix command to execute against a zookeeper cluster
+# where helix resources and instances have been configured.
 #
 # Notes:
-# - This script requires env_rdps.sh to be on the same folder, 
+# - This script requires env_helix.sh to be on the same folder, 
 # this file is used to set all the environment variables.
 #
 # Change logs:

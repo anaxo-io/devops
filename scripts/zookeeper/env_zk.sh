@@ -7,10 +7,10 @@
 # - Usually you just need to modify the variables of first section of this file.
 #
 # Change logs:
-#	1.0: (hicham.x.medkouri@jpmorgan.com), intial version
+#	1.0: hicham medkouri, intial version
 
-export ZK_HOME=/c/Apps/Servers/clusters/zookeeper/3.4.7
-export ZK_WORK=/c/Apps/Services/zookeeper
+export ZK_HOME=/opt/servers/clusters/zookeeper/3.4.7
+export ZK_WORK=/opt/services/clusters/zookeeper
 export ZK_CONF=${ZK_WORK}/conf
 export ZK_CONF_FILE=zk.conf
 export ZK_DATA=${ZK_WORK}/data
@@ -41,15 +41,11 @@ ZK_LOG_CFGFILE=${ZK_WORK}/conf/log4j.properties
 ZK_LOGS_DIR=${ZK_WORK}/logs
 
 # For Cygwin, switch paths to Windows format before running java
-if $cygwin; then
-  #ZK_CONF=`cygpath --absolute --windows "${ZK_CONF}"`
-  #ZK_DATA=`cygpath --absolute --windows "${ZK_DATA}"`
-  #ZK_LOG=`cygpath --absolute --windows "${ZK_LOG}"`  
+if $cygwin; then 
   ZK_LOGS_DIR=`cygpath --absolute --windows "${ZK_LOGS_DIR}"`
   ZK_LOG_CFGFILE=`cygpath --absolute --windows "${ZK_LOG_CFGFILE}"`
   ZK_PID_FILENAME=`cygpath --absolute --windows "${ZK_PID_FILENAME}"`  
 fi
-#export ZK_DATA ZK_LOG ZK_CFGFILE ZK_LOG_CFGFILE ZK_LOGS_DIR
 export ZK_LOGS_DIR ZK_LOG_CFGFILE ZK_PID_FILENAME
 
 JAVA_OPTS=

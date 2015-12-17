@@ -7,13 +7,13 @@
 # - Usually you just need to modify the variables of first section of this file.
 #
 # Change logs:
-#	1.0: (hicham.x.medkouri@jpmorgan.com), intial version
+#	1.0: hicham medkouri, intial version
 
-export MONGODB_HOME=C:/Apps/Servers/mongodb/3.0.5-x64
-export MONGODB_WORK=C:/Work/Services/local-mongodb
-export MONGODB_DATA=C:/Work/Data/mongodb
-export MONGODB_LOG=C:/Work/Services/local-mongodb/logs/mongodb.log
-export MONGODB_EXE=mongod.exe
+export MONGODB_HOME=/opt/servers/db/mongodb/3.0.5-x64
+export MONGODB_WORK=/opt/services/db/mongodb
+export MONGODB_DATA=${MONGODB_WORK}/data
+export MONGODB_LOG=${MONGODB_WORK}/logs/mongodb.log
+export MONGODB_EXE=mongod.sh
 export MONGODB_NAME=mongod
 export MONGODB_PORT=2700
 export MONGODB_LOG_LEVEL=info
@@ -42,7 +42,6 @@ LOGS_DIR=${MONGODB_WORK}/logs
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
-  
   MONGODB_DATA=`cygpath --absolute --windows "${MONGODB_DATA}"`
   MONGODB_LOG=`cygpath --absolute --windows "${MONGODB_LOG}"`
   MONGODB_CFGFILE=`cygpath --absolute --windows "${MONGODB_CFGFILE}"`
