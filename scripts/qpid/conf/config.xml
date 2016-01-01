@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<broker>
+    <prefix>${QPID_HOME}</prefix>
+    <work>${QPID_WORK}</work>
+    <conf>${QPID_WORK}/conf</conf>
+
+    <plugin-directory>${QPID_HOME}/lib/plugins</plugin-directory>
+    <cache-directory>${QPID_WORK}/cache</cache-directory>
+    
+    <connector>
+        <ssl>
+            <enabled>false</enabled>
+            <sslOnly>false</sslOnly>
+            <keystorePath>/path/to/keystore.ks</keystorePath>
+            <keystorePassword>keystorepass</keystorePassword>
+        </ssl>
+        <qpidnio>false</qpidnio>
+        <protectio>
+            <enabled>false</enabled>
+            <readBufferLimitSize>262144</readBufferLimitSize>
+            <writeBufferLimitSize>262144</writeBufferLimitSize>	    
+        </protectio>
+        <transport>nio</transport>
+        <port>5672</port>
+        <sslport>8672</sslport>
+        <socketReceiveBuffer>32768</socketReceiveBuffer>
+        <socketSendBuffer>32768</socketSendBuffer>
+    </connector>
+    <management>
+        <enabled>true</enabled>
+        <jmxport>8999</jmxport>
+        <ssl>
+            <enabled>false</enabled>
+            <keyStorePath>${conf}/qpid.keystore</keyStorePath>
+            <keyStorePassword>password</keyStorePassword>
+        </ssl>
+    </management>
+    <advanced>
+        <filterchain enableExecutorPool="true"/>
+        <framesize>65535</framesize>
+        <compressBufferOnQueue>false</compressBufferOnQueue>
+        <enableJMSXUserID>false</enableJMSXUserID>
+        <locale>en_US</locale>	
+    </advanced>
+
+    <security>
+        <pd-auth-manager>
+            <principal-database>
+                <class>org.apache.qpid.server.security.auth.database.PlainPasswordFilePrincipalDatabase</class>
+                <attributes>
+                    <attribute>
+                        <name>passwordFile</name>
+                        <value>${conf}/passwd</value>
+                    </attribute>
+                </attributes>
+            </principal-database>
+        </pd-auth-manager>
+
+        <access_control_list>
+            <management>
+                <readonly>
+                    <users>
+                        <user>guest</user>
+                    </users>
+                </readonly>
+                <readwrite>
+                    <users>
+                        <user>user</user>
+                    </users>
+                </readwrite>
+                <admin>
+                    <users>
+                        <user>admin</user>
+                    </users>
+                </admin>
+            </management>
+        </access_control_list>
+    </security>
+
+    <virtualhosts>${conf}/virtualhosts.xml</virtualhosts>
+    
+    <heartbeat>
+        <delay>0</delay>
+        <timeoutFactor>2.0</timeoutFactor>
+    </heartbeat>
+    <queue>
+        <auto_register>true</auto_register>
+    </queue>
+
+    <status-updates>ON</status-updates>
+
+</broker>
+
+

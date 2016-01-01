@@ -9,8 +9,8 @@
 # Change logs:
 #	1.0: hicham medkouri, intial version
 
-export MONGODB_HOME=/opt/servers/db/mongodb/3.0.5-x64
-export MONGODB_WORK=/opt/services/db/mongodb
+export MONGODB_HOME=/apps/servers/stores/mongodb/3.0.5-x64
+export MONGODB_WORK=/apps/services/stores/mongodb/mdb-dev-01
 export MONGODB_DATA=${MONGODB_WORK}/data
 export MONGODB_LOG=${MONGODB_WORK}/logs/mongodb.log
 export MONGODB_EXE=mongod.sh

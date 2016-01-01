@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<virtualhosts>
+    <default>test</default>
+    <virtualhost>
+        <name>test</name>
+        <test>
+            <security>
+				<access_control_list>
+					<allow-all/>
+				</access_control_list>
+			</security>
+			<store>
+                <class>org.apache.qpid.server.store.MemoryMessageStore
+                </class>
+            </store>
+
+            <queues>
+                <minimumAlertRepeatGap>30000</minimumAlertRepeatGap>
+                <maximumMessageCount>50</maximumMessageCount>
+                <queue>
+                    <name>queue</name>
+                    <queue>
+                        <exchange>amq.direct</exchange>
+                        <maximumQueueDepth>4235264</maximumQueueDepth>
+                        <!-- 4Mb -->
+                        <maximumMessageSize>2117632</maximumMessageSize>
+                        <!-- 2Mb -->
+                        <maximumMessageAge>600000</maximumMessageAge>
+                        <!-- 10 mins -->
+                    </queue>
+                </queue>
+                <queue>
+                    <name>ping</name>
+                    <ping>
+                        <exchange>amq.direct</exchange>
+                        <maximumQueueDepth>4235264</maximumQueueDepth>
+                        <!-- 4Mb -->
+                        <maximumMessageSize>2117632</maximumMessageSize>
+                        <!-- 2Mb -->
+                        <maximumMessageAge>600000</maximumMessageAge>
+                        <!-- 10 mins -->
+                    </ping>
+                </queue>
+            </queues>
+        </test>
+    </virtualhost>
+</virtualhosts>
+
+

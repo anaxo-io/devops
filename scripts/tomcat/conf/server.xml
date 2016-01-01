@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="${tomcat.shutdown.port}" shutdown="SHUTDOWN">
+
+  <Listener className="org.apache.catalina.core.JasperListener" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+	<Resource name="jdbc/DB"
+            auth="Container"
+            type="javax.sql.DataSource"
+            initialSize="2"
+            maxActive="30"
+            maxIdle="30"
+            maxWait="3000"
+            minIdle="0"
+            testOnBorrow="true"
+            testOnReturn="false"
+            testWhileIdle="false"
+            poolPreparedStatements="true"
+            maxOpenPreparedStatements="10"
+            removeAbandoned="true"
+            removeAbandonedTimeout="60"
+            logAbandoned="true"
+            username="derby"
+            password="derby"
+            driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+            url="jdbc:derby://localhost:${derby.port}/DB;create=true;poolPreparedStatements=true"/>
+			<!-- for embedded DB replace the url value by "jdbc:derby:memory:DB;create=true" -->
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+    <Connector port="${tomcat.server.port}" protocol="HTTP/1.1" 
+               connectionTimeout="20000" 
+               redirectPort="${tomcat.redirect.port}" />
+    <Engine name="Catalina" defaultHost="localhost">
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+      <Host name="localhost"  appBase="webapps"
+            unpackWARs="false" autoDeploy="true" 
+	    xmlBase="./properties/" deployXML="false">
+      </Host>
+    </Engine>
+  </Service>
+</Server>

@@ -9,6 +9,6 @@
 # Change logs:
 #	1.0: (hicham medkouri), intial version
 
-export HELIX_HOME=/opt/servers/clusters/helix/0.7.1/helix-core-0.7.1
-export HELIX_WORK=/opt/services/clusters/helix
+export HELIX_HOME=/apps/servers/clusters/helix/0.7.1/helix-core-0.7.1
+export HELIX_WORK=/apps/services/clusters/helix
 

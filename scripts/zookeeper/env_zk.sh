@@ -9,13 +9,13 @@
 # Change logs:
 #	1.0: hicham medkouri, intial version
 
-export ZK_HOME=/opt/servers/clusters/zookeeper/3.4.7
-export ZK_WORK=/opt/services/clusters/zookeeper
+export ZK_HOME=/apps/servers/clusters/zookeeper/3.4.7
+export ZK_WORK=/apps/services/clusters/zookeeper/zk-dev-01
 export ZK_CONF=${ZK_WORK}/conf
 export ZK_CONF_FILE=zk.conf
 export ZK_DATA=${ZK_WORK}/data
 export ZK_LOG=${ZK_WORK}/logs/zk.log
-export ZK_NAME=zk-server
+export ZK_NAME=zk-dev-01
 export ZK_PORT=2181
 export ZK_LOG_LEVEL=INFO
 
