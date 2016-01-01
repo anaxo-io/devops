@@ -32,7 +32,7 @@ export DERBY_PORT=1082
 cygwin=false
 darwin=false
 os400=false
-case "`uname`" in
+case "$(uname)" in
 CYGWIN*) cygwin=true;;
 Darwin*) darwin=true;;
 OS400*) os400=true;;
@@ -46,11 +46,11 @@ export CATALINA_PID=${TOMCAT_RUNTIME}/tomcat.pid
 LOGS_DIR=${CATALINA_BASE}/logs
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
-  LOGS_DIR=`cygpath --absolute --windows "${LOGS_DIR}"`
+  LOGS_DIR=$(cygpath --absolute --windows "${LOGS_DIR}")
 fi
 export LOGS_DIR
 
-export CATALINA_OUT=${LOGS_DIR}/catalina.`date +\%Y-\%m-\%d`.out
+export CATALINA_OUT=${LOGS_DIR}/catalina.$(date +\%Y-\%m-\%d).out
 
 export GC_OPTS="-server"
 export GC_OPTS="${GC_OPTS} -XX:+UsePerfData"
@@ -82,5 +82,3 @@ export JAVA_OPTS="${JAVA_OPTS} -Dderby.port=${DERBY_PORT}"
 export JPDA_ADDRESS=8787
 export JPDA_TRANSPORT=dt_socket
 export JPDA_SUSPEND=y
-
-
